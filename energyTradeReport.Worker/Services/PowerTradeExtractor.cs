@@ -16,46 +16,29 @@ namespace energyTradeReport.Worker.Services
             _logger = logger;
         }
 
-        public async Task<Dictionary<TimeSpan, double>> GetAggregatedVolumeByHourAsync(DateTime referenceDateUtc)
+        public async Task<List<Domain.Entities.PowerTrade>> GetTradesFromServiceAsync(DateTime referenceDateUtc)
         {
-            try
+            var powerService = new PowerService();
+            var rawTrades = await powerService.GetTradesAsync(referenceDateUtc.Date);
+
+            var domainTrades = new List<Domain.Entities.PowerTrade>();
+
+            foreach (var rawTrade in rawTrades)
             {
-                var powerService = new PowerService();
-                var trades = await powerService.GetTradesAsync(referenceDateUtc.Date);
-
-                var aggregated = new Dictionary<TimeSpan, double>();
-
-                foreach (var trade in trades)
+                var domainPeriods = new List<Domain.Entities.PowerPeriod>();
+                foreach (var rawPeriod in rawTrade.Periods)
                 {
-                    foreach (var period in trade.Periods)
-                    {
-                        var localTime = GetLocalTimeFromPeriod(period.Period, referenceDateUtc.Date);
-                        if (aggregated.ContainsKey(localTime))
-                            aggregated[localTime] += period.Volume;
-                        else
-                            aggregated[localTime] = period.Volume;
-                    }
+                    var periodResult = Domain.Entities.PowerPeriod.Instance(rawPeriod.Period, rawPeriod.Volume);
+                    if (periodResult.Sucess && periodResult.Object is not null)
+                        domainPeriods.Add(periodResult.Object);
                 }
 
-                _logger.LogInformation("Trades agregados com sucesso para o dia {date}", referenceDateUtc.Date);
-                return aggregated;
+                var tradeResult = Domain.Entities.PowerTrade.Instance(domainPeriods);
+                if (tradeResult.Sucess && tradeResult.Object is not null)
+                    domainTrades.Add(tradeResult.Object);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Erro ao extrair dados do PowerService");
-                throw;
-            }
-        }
 
-
-
-        private TimeSpan GetLocalTimeFromPeriod(int period, DateTime day)
-        {
-            // Cada período representa uma hora, começando às 23:00 do dia anterior
-            var londonZone = TZConvert.GetTimeZoneInfo(_settings.TimeZone); // "GMT Standard Time"
-            var startTime = day.AddDays(-1).Date.AddHours(23).AddHours(period - 1);
-            var localTime = TimeZoneInfo.ConvertTimeFromUtc(startTime.ToUniversalTime(), londonZone);
-            return localTime.TimeOfDay;
+            return domainTrades;
         }
     }
 }

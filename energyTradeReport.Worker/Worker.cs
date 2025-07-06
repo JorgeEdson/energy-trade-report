@@ -22,6 +22,8 @@ namespace energyTradeReport.Worker
             _logger = logger;
             _settings = options.Value;
             _csvExporter = csvExporter;
+            _extractor = extractor;
+            _aggregator = aggregator;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,7 +52,7 @@ namespace energyTradeReport.Worker
                 _logger.LogInformation("Executando relatório às {hora}", localNow);
 
                 // 1. Extrair dados brutos da DLL
-                var rawTrades = await _extractor.GetAggregatedVolumeByHourAsync(utcNow);
+                var rawTrades = await _extractor.GetTradesFromServiceAsync(utcNow);
 
                 // 2. Agregar usando domínio rico
                 var dailyPosition = _aggregator.Aggregate(rawTrades, DateOnly.FromDateTime(utcNow));
@@ -65,6 +67,8 @@ namespace energyTradeReport.Worker
                 var filePath = _csvExporter.Export(volumes);
 
                 _logger.LogInformation("Relatório exportado com sucesso: {arquivo}", filePath);
+                _logger.LogInformation("Exportando {count} volumes para {path}", volumes.Count, filePath);
+
             }
             catch (Exception ex)
             {

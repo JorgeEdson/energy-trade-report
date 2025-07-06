@@ -17,7 +17,7 @@ namespace energyTradeReport.Worker.Services
             _logger = logger;
         }
 
-        public string Export(Dictionary<TimeSpan, double> aggregatedVolumes)
+        public string Export(IReadOnlyDictionary<TimeSpan, double> aggregatedVolumes)
         {
             try
             {
@@ -48,7 +48,5 @@ namespace energyTradeReport.Worker.Services
                 throw;
             }
         }
-
-
     }
 }
