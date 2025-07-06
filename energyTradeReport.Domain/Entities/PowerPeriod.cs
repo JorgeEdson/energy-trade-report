@@ -29,11 +29,10 @@ namespace energyTradeReport.Domain.Entities
         private PowerPeriod(int periodParam, double volumeParam)
         {
             SetPeriod(periodParam);
-            SetVolume(volumeParam);
-            
+            SetVolume(volumeParam);            
         }
 
-        public GenericResult<PowerPeriod> Instance(int periodParam, double volumeParam)
+        public static GenericResult<PowerPeriod> Instance(int periodParam, double volumeParam)
         {
             try
             {
@@ -48,10 +47,9 @@ namespace energyTradeReport.Domain.Entities
             {
                 return new GenericResult<PowerPeriod>(
                     false,
-                    "",
+                    ex.Message,
                     null
-                );
-            
+                );            
             }
         }
     }

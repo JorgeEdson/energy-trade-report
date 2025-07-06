@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "energyTradeReport.Domain", "energyTradeReport.Domain\energyTradeReport.Domain.csproj", "{7C5A5872-DE71-4D90-85A3-D3659F4ADD91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "energyTradeReport.Worker", "energyTradeReport.Worker\energyTradeReport.Worker.csproj", "{919D10B7-EA35-4177-8614-C6F5214D0E7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7C5A5872-DE71-4D90-85A3-D3659F4ADD91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C5A5872-DE71-4D90-85A3-D3659F4ADD91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C5A5872-DE71-4D90-85A3-D3659F4ADD91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919D10B7-EA35-4177-8614-C6F5214D0E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919D10B7-EA35-4177-8614-C6F5214D0E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919D10B7-EA35-4177-8614-C6F5214D0E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919D10B7-EA35-4177-8614-C6F5214D0E7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

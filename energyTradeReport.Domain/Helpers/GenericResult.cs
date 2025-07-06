@@ -1,6 +1,4 @@
-﻿
-
-namespace energyTradeReport.Domain.Helpers
+﻿namespace energyTradeReport.Domain.Helpers
 {
     public class GenericResult<T>
     {
